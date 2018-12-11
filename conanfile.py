@@ -131,6 +131,9 @@ class LibcurlConan(ConanFile):
         tools.get("https://curl.haxx.se/download/curl-%s.tar.gz" % self.version)
         os.rename("curl-%s" % self.version, self.source_subfolder)
         tools.download("https://curl.haxx.se/ca/cacert.pem", "cacert.pem", verify=False)
+        tools.replace_in_file(os.path.join(self.source_subfolder, "CMakeLists.txt"), 
+                              "list(APPEND CURL_LIBS \"crypt32\")", 
+                              "list(APPEND CURL_LIBS \"crypt32\" \"ws2_32\")")
         os.rename(os.path.join(self.source_subfolder, "CMakeLists.txt"),
                   os.path.join(self.source_subfolder, "CMakeLists_original.txt"))
         shutil.copy("CMakeLists.txt",
