@@ -32,4 +32,13 @@ if __name__ == "__main__":
                               new_build_requires, item.reference])
     builder.items = items
 
+    if platform.system() == "Windows":
+        extend_settings = []
+        for settings in builder.items:
+            settings = copy.deepcopy(settings)
+            settings.options["libcurl:with_openssl"] = False
+            settings.options["libcurl:with_winssl"] = True
+            extend_settings.append(settings)
+        builder.items.extend(extend_settings)
+
     builder.run()
